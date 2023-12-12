@@ -4,8 +4,9 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 from openai import OpenAI
+from fpdf import FPDF
 
 app = Flask(__name__)
 client = OpenAI()
@@ -26,10 +27,14 @@ def get_words(prompt_req):
     print(words)
     return words
 
-orientations = ['leftright', 'rightleft', 'up', 'down', 'rightup', 'rightdown', 'leftup', 'leftdown']
-
-def make_grid(words):
+def make_grid(words, backwards_allowed):
     grid_size = 20
+    print(backwards_allowed)
+    orientations = ['leftright', 'rightleft', 'up', 'down', 'rightup', 'rightdown', 'leftup', 'leftdown']
+    if backwards_allowed == False:
+        orientations = ['leftright', 'down', 'rightup', 'rightdown']
+    print(orientations)
+
     # populate a grid_size x grid_size grid with underscores
     grid = [['_' for _ in range(grid_size)] for _ in range(grid_size)]
 
@@ -114,17 +119,59 @@ def make_grid(words):
 
     return grid
 
-@app.route("/", methods=['GET'])
-def index():
-    if request.method == 'GET':
-        print("GET")
-        prompt = request.args.get('prompt')
-        prompt_req = "What are 10 single words (no spaces or hyphens) related to " + prompt + "?"
-        words = get_words(prompt_req)
-        grid = make_grid(words)
-        return render_template("wordsearch.html", grid=grid, words=words)
-    else:
-        print("No GET")
 
+def save_pdf(prompt, grid, words):
+    pdf = FPDF(orientation = 'P',unit = 'mm', format='A4')
+
+    pdf.add_page()
+    gridx = 200
+    gridy = 8
+
+    pdf.set_font("Arial", size = 25)
+    title = prompt.upper()
+    pdf.cell(gridx, 10, txt = title, ln = 1, align = 'C')
+
+    pdf.set_font("Courier", size = 12)
+    pdf.cell(gridx, gridy, txt = "", ln = 1) 
+    # create a cell
+    for i in grid:
+        x = "  ".join(i)
+        pdf.cell(gridx, gridy, txt = x, ln = 1, align = 'C')
+    
+    pdf.set_font("Courier", size = 12)
+    pdf.cell(gridx, gridy, txt = "", ln = 1) 
+    hints_per_row = 5
+    split_lists = [words[x:x+hints_per_row] for x in range(0, len(words), hints_per_row)]
+    for i in split_lists:
+        wordx = ", ".join(i)
+        pdf.cell(gridx, 10, txt = wordx, ln = 1, align = 'C')
+    
+    response = make_response(pdf.output("wordsearch.pdf"))
+    response.headers["Content-Type"] = "application/pdf"
+    return response
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+    
+@app.route("/wordsearch", methods=['GET'])
+def wordsearch():
+    if request.method == 'GET':
+        prompt = request.args.get('prompt')
+        if prompt:
+            backwards = request.args.get('backwards', type=int)
+            backwards_allowed = True
+            if backwards == 0:
+                backwards_allowed = False
+            print(backwards_allowed)
+            prompt_req = "What are 10 single words (no spaces or hyphens) related to " + prompt + "?"
+            words = get_words(prompt_req)
+            grid = make_grid(words, backwards_allowed)
+            return render_template("wordsearch.html", prompt=string.capwords(prompt), grid=grid, words=words)
+        else:
+            return render_template("wordsearch.html", prompt=prompt)
+    else:
+        prompt = ''
+        return render_template("index.html", prompt=prompt)
 
 app.run(host="0.0.0.0", port=80)

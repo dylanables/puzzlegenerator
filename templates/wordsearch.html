@@ -4,13 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Search Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div>
-        <form action="/" method="GET">
-            <input type="text" name="prompt" id="prompt" />
+        {% if (prompt == None) or (prompt == '') %}
+        <form action="/wordsearch" method="GET">
+            Choose a topic: <input type="text" name="prompt" id="prompt" />
+            Exclude backwards: <input type="checkbox" name="backwards" id="backwards" value="0" />
             <input type="submit" value="Generate Word Search" />
         </form>
+        {% endif %}
+    </div>
+    <div>
+        {% if prompt %}
+        <a href="/wordsearch">Re-do</a>
+        <h1>{{prompt}} Word Search</h1>
+        <button onclick="window.print()">Save/Print</button>
 
         <table>
             <tbody>
@@ -23,12 +33,14 @@
                 {% endfor %} 
             </tbody>
         </table>
-    </div>
-    <div>
-        <p>Words:</p>
+
+        <p><b>Words:</b></p>
         {% for word in words %}
             <p>{{word}}</p>
         {% endfor %}
+
+        {% endif %}
     </div>
+
 </body>
 </html>
