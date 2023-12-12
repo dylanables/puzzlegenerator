@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Search Generator</title>
+</head>
+<body>
+    <div>
+        <form action="/" method="GET">
+            <input type="text" name="prompt" id="prompt" />
+            <input type="submit" value="Generate Word Search" />
+        </form>
+
+        <table>
+            <tbody>
+                {% for row in grid %}
+                    <tr>
+                        {% for letter in row %}
+                        <td>{{letter}} </td>
+                        {% endfor %} 
+                    </tr>
+                {% endfor %} 
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <p>Words:</p>
+        {% for word in words %}
+            <p>{{word}}</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,100 +1,130 @@
 import random
 import string
+import json
+from dotenv import load_dotenv
+load_dotenv()
 
-from pprint import pprint
+from flask import Flask, render_template, request
+from openai import OpenAI
 
-words = ["BROWNIE", "DODGEBALL", "SKIING", "CODING", "WATER", "HOUSEPLANT"]
+app = Flask(__name__)
+client = OpenAI()
 
-grid_size = 20
-
-# populate a grid_size x grid_size grid with underscores
-grid = [['_' for _ in range(grid_size)] for _ in range(grid_size)]
-
-def print_grid():
-    for x in range(grid_size):
-        print('\t'*5 + ' '.join(grid[x]))
+def get_words(prompt_req):
+    print(prompt_req)
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo-1106",
+        response_format={ "type": "json_object" },
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant designed to output words in all uppercase for a word search puzzle in JSON. Create a valid json array of strings with a key name of 'words'"},
+            {"role": "user", "content": prompt_req}
+        ]
+    )
+    json_response = json.loads(response.choices[0].message.content)
+    print(json_response)
+    words = json_response['words']
+    print(words)
+    return words
 
 orientations = ['leftright', 'rightleft', 'up', 'down', 'rightup', 'rightdown', 'leftup', 'leftdown']
 
-for word in words:
-    word_length = len(word)
+def make_grid(words):
+    grid_size = 20
+    # populate a grid_size x grid_size grid with underscores
+    grid = [['_' for _ in range(grid_size)] for _ in range(grid_size)]
 
-    placed = False
-    while not placed:
-        orientation = random.choice(orientations)
+    for word in words:
+        word_length = len(word)
 
-        if orientation == 'leftright':
-            step_x = 1
-            step_y = 0
-        if orientation == 'rightleft':
-            step_x = -1
-            step_y = 0
-        if orientation == 'up':
-            step_x = 0
-            step_y = -1
-        if orientation == 'down':
-            step_x = 0
-            step_y = 1
-        if orientation == 'rightup':
-            step_x = 1
-            step_y = -1
-        if orientation == 'rightdown':
-            step_x = 1
-            step_y = 1
-        if orientation == 'leftup':
-            step_x = -1
-            step_y = -1
-        if orientation == 'leftdown':
-            step_x = -1
-            step_y = 1
+        placed = False
+        while not placed:
+            orientation = random.choice(orientations)
 
-        # choosing random starting position for word
-        x_pos = random.randint(0, grid_size)
-        y_pos = random.randint(0, grid_size)
+            if orientation == 'leftright':
+                step_x = 1
+                step_y = 0
+            if orientation == 'rightleft':
+                step_x = -1
+                step_y = 0
+            if orientation == 'up':
+                step_x = 0
+                step_y = -1
+            if orientation == 'down':
+                step_x = 0
+                step_y = 1
+            if orientation == 'rightup':
+                step_x = 1
+                step_y = -1
+            if orientation == 'rightdown':
+                step_x = 1
+                step_y = 1
+            if orientation == 'leftup':
+                step_x = -1
+                step_y = -1
+            if orientation == 'leftdown':
+                step_x = -1
+                step_y = 1
 
-        # determine if word can fit in grid with it's starting position
-        ending_x = x_pos + word_length*step_x
-        ending_y = y_pos + word_length*step_y
+            # choosing random starting position for word
+            x_pos = random.randint(0, grid_size)
+            y_pos = random.randint(0, grid_size)
 
-        if ending_x < 0 or ending_x >= grid_size: continue
-        if ending_y < 0 or ending_y >= grid_size: continue
+            # determine if word can fit in grid with it's starting position
+            ending_x = x_pos + word_length*step_x
+            ending_y = y_pos + word_length*step_y
 
-        failed = False
+            if ending_x < 0 or ending_x >= grid_size: continue
+            if ending_y < 0 or ending_y >= grid_size: continue
 
-        for i in range(word_length):
-            character = word[i]
+            failed = False
 
-            curr_x = x_pos + i*step_x
-            curr_y = y_pos + i*step_y
-
-            character_curr_pos = grid[curr_x][curr_y]
-            if character_curr_pos != '_':
-                if character_curr_pos == character:
-                    continue
-                else:
-                    failed = True
-                    break
-            
-        if failed:
-            continue
-        else:
-            # place word
             for i in range(word_length):
                 character = word[i]
 
                 curr_x = x_pos + i*step_x
                 curr_y = y_pos + i*step_y
 
-                grid[curr_x][curr_y] = ('\x1b[6;30;42m' + character + '\x1b[0m')
+                character_curr_pos = grid[curr_x][curr_y]
+                if character_curr_pos != '_':
+                    if character_curr_pos == character:
+                        continue
+                    else:
+                        failed = True
+                        break
+                
+            if failed:
+                continue
+            else:
+                # place word
+                for i in range(word_length):
+                    character = word[i]
 
-            placed = True
+                    curr_x = x_pos + i*step_x
+                    curr_y = y_pos + i*step_y
 
-# fill rest of grid with random letters
-for x in range(grid_size):
-    for y in range(grid_size):
-        if (grid[x][y] == '_'):
-            grid[x][y] = random.choice(string.ascii_uppercase)
+                    grid[curr_x][curr_y] = character
 
-print_grid()
-print("Words are: ")
-pprint(words)
+                placed = True
+
+    # fill rest of grid with random letters
+    for x in range(grid_size):
+        for y in range(grid_size):
+            if (grid[x][y] == '_'):
+                grid[x][y] = random.choice(string.ascii_uppercase)
+
+    return grid
+
+@app.route("/", methods=['GET'])
+def index():
+    if request.method == 'GET':
+        print("GET")
+        prompt = request.args.get('prompt')
+        prompt_req = "What are 10 single words (no spaces or hyphens) related to " + prompt + "?"
+        words = get_words(prompt_req)
+        grid = make_grid(words)
+        return render_template("wordsearch.html", grid=grid, words=words)
+    else:
+        print("No GET")
+
+
+app.run(host="0.0.0.0", port=80)
