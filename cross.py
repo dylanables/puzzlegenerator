@@ -1,10 +1,10 @@
+from __main__ import app
 from flask import render_template, request
 import random, re, time, string, json
 from copy import copy as duplicate
 from dotenv import load_dotenv
 load_dotenv()
 from openai import OpenAI
-from __main__ import app
 client = OpenAI()
  
 # optional, speeds up by a factor of 4

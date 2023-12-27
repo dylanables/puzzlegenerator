@@ -1,10 +1,10 @@
+from __main__ import app
 from flask import render_template, request, make_response
 import random, string, json
 from dotenv import load_dotenv
 load_dotenv()
 from openai import OpenAI
 from fpdf import FPDF
-from __main__ import app
 client = OpenAI()
 
 def get_words(prompt_req):
