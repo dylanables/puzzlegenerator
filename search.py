@@ -1,18 +1,14 @@
-import random
-import string
-import json
+from flask import render_template, request, make_response
+import random, string, json
 from dotenv import load_dotenv
 load_dotenv()
-
-from flask import Flask, render_template, request, make_response
 from openai import OpenAI
 from fpdf import FPDF
-
-app = Flask(__name__)
+from __main__ import app
 client = OpenAI()
 
 def get_words(prompt_req):
-    print(prompt_req)
+    '''
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         response_format={ "type": "json_object" },
@@ -25,6 +21,8 @@ def get_words(prompt_req):
     print(json_response)
     words = json_response['words']
     print(words)
+    '''
+    words = ['CHRISTMAS', 'SANTA', 'REINDEER', 'GIFTS', 'ORNAMENTS', 'COOKIES', 'BELLS', 'CANDLES', 'HOLLY', 'JOLLY']
     return words
 
 def make_grid(words, backwards_allowed):
@@ -71,8 +69,8 @@ def make_grid(words, backwards_allowed):
                 step_y = 1
 
             # choosing random starting position for word
-            x_pos = random.randint(0, grid_size)
-            y_pos = random.randint(0, grid_size)
+            x_pos = random.randint(0, grid_size-1)
+            y_pos = random.randint(0, grid_size-1)
 
             # determine if word can fit in grid with it's starting position
             ending_x = x_pos + word_length*step_x
@@ -119,7 +117,6 @@ def make_grid(words, backwards_allowed):
 
     return grid
 
-
 def save_pdf(prompt, grid, words):
     pdf = FPDF(orientation = 'P',unit = 'mm', format='A4')
 
@@ -150,10 +147,6 @@ def save_pdf(prompt, grid, words):
     response.headers["Content-Type"] = "application/pdf"
     return response
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-    
 @app.route("/wordsearch", methods=['GET'])
 def wordsearch():
     if request.method == 'GET':
@@ -172,6 +165,4 @@ def wordsearch():
             return render_template("wordsearch.html", prompt=prompt)
     else:
         prompt = ''
-        return render_template("index.html", prompt=prompt)
-
-app.run(host="0.0.0.0", port=80)
+        return render_template("wordsearch.html", prompt=prompt)

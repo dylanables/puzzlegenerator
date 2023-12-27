@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Generator: Crossword</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+        function toggleSolution(){
+            var unsolved = document.getElementById('unsolved');
+            var solved = document.getElementById('solved');
+            var toggleSolution = document.getElementById('toggleSolution');
+            console.log("button clicked")
+
+            if (solved.style.display == 'block') {
+                unsolved.style.display = 'block';
+                solved.style.display = 'none';
+                toggleSolution.innerHTML = 'Reveal Solution';
+                console.log("hide clicked")
+            } else {
+                unsolved.style.display = 'none';
+                solved.style.display = 'block';
+                toggleSolution.innerHTML = 'Hide Solution';
+                console.log("reveal clicked")
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div>
+            {% if (prompt == None) or (prompt == '') %}
+            <form action="/crossword" method="GET">
+                Choose a topic: <input type="text" name="prompt" id="prompt" />
+                <input type="submit" value="Generate Crossword" />
+            </form>
+            {% endif %}
+        </div>
+        <div>
+            {% if prompt %}
+            <a href="/crossword">Re-do</a>
+            <button onclick="window.print()">Save/Print</button>
+            <button onclick="toggleSolution()" id="toggleSolution">Reveal Solution</button>
+            <h1>{{prompt}} Crossword</h1>
+
+            <table id="unsolved" style="display: block;">
+                <tbody>
+                    {% for row in solution %}
+                        <tr>
+                            {% for num_letter in row %}
+                            {% if num_letter.letter != "-" %}
+                                <td class="box space">
+                                    {% if num_letter.num != 0 %}
+                                        <span class="number">{{num_letter.num}}</span>
+                                    {% endif %}
+                                    <span class="letter"></span>
+                                </td>
+                            {% else %}
+                                <td class="box"></td>
+                            {% endif %}
+                            {% endfor %} 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <table id="solved" style="display: none;">
+                <tbody>
+                    {% for row in solution %}
+                        <tr>
+                            {% for num_letter in row %}
+                            {% if num_letter.letter != "-" %}
+                                <td class="box space">
+                                    {% if num_letter.num != 0 %}
+                                        <span class="number">{{num_letter.num}}</span>
+                                    {% endif %}
+                                    <span class="letter">{{num_letter.letter}}</span>
+                                </td>
+                            {% else %}
+                                <td class="box"></td>
+                            {% endif %}
+                            {% endfor %} 
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% for clue in clues  %}<p>{{clue}}</p>{% endfor %}
+
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

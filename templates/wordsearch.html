@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Search Generator</title>
+    <title>Puzzle Generator: Word Search</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
@@ -19,15 +19,15 @@
     <div>
         {% if prompt %}
         <a href="/wordsearch">Re-do</a>
-        <h1>{{prompt}} Word Search</h1>
         <button onclick="window.print()">Save/Print</button>
+        <h1>{{prompt}} Word Search</h1>
 
         <table>
             <tbody>
                 {% for row in grid %}
                     <tr>
                         {% for letter in row %}
-                        <td>{{letter}} </td>
+                        <td style="text-align: center;">{{letter}}</td>
                         {% endfor %} 
                     </tr>
                 {% endfor %} 
