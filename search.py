@@ -8,7 +8,6 @@ from __main__ import app
 client = OpenAI()
 
 def get_words(prompt_req):
-    '''
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         response_format={ "type": "json_object" },
@@ -21,8 +20,7 @@ def get_words(prompt_req):
     print(json_response)
     words = json_response['words']
     print(words)
-    '''
-    words = ['CHRISTMAS', 'SANTA', 'REINDEER', 'GIFTS', 'ORNAMENTS', 'COOKIES', 'BELLS', 'CANDLES', 'HOLLY', 'JOLLY']
+    
     return words
 
 def make_grid(words, backwards_allowed):
@@ -157,7 +155,7 @@ def wordsearch():
             if backwards == 0:
                 backwards_allowed = False
             print(backwards_allowed)
-            prompt_req = "What are 10 single words (no spaces or hyphens) related to " + prompt + "?"
+            prompt_req = "Provide 10 unique words (no spaces or hyphens) related to " + prompt + "?"
             words = get_words(prompt_req)
             grid = make_grid(words, backwards_allowed)
             return render_template("wordsearch.html", prompt=string.capwords(prompt), grid=grid, words=words)

@@ -9,6 +9,7 @@
 <body>
     <div>
         {% if (prompt == None) or (prompt == '') %}
+        <img src="{{ url_for('static', filename='images/wordsearch.jpg') }}" alt="Word Search Puzzle"/>
         <form action="/wordsearch" method="GET">
             Choose a topic: <input type="text" name="prompt" id="prompt" />
             Exclude backwards: <input type="checkbox" name="backwards" id="backwards" value="0" />

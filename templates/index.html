@@ -7,7 +7,17 @@
 </head>
 <body>
     <h1>Generate custom puzzles with the help of AI!</h1>
-    <p><a href="/wordsearch">Generate Word Search</a></p>
-    <p><a href="/crossword">Generate Crossword</a></p>
+    <div>
+        <a href="/wordsearch">
+        <img src="{{ url_for('static', filename='images/wordsearch.jpg') }}" alt="Word Search Puzzle"/>
+        <p>Generate Word Search</p>
+        </a>
+    </div>
+    <div>
+        <a href="/crossword">
+        <img src="{{ url_for('static', filename='images/crossword.jpg') }}" alt="Crossword Puzzle"/>
+        <p>Generate Crossword</p>
+        </a>
+    </div>
 </body>
 </html>

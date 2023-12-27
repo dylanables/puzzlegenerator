@@ -12,7 +12,6 @@ client = OpenAI()
 # psyco.full()
 
 def get_words_and_clues(prompt_req):
-    '''
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         response_format={ "type": "json_object" },
@@ -24,9 +23,7 @@ def get_words_and_clues(prompt_req):
     json_response = json.loads(response.choices[0].message.content)
     print(json_response)
     words = json_response['words']
-    '''
 
-    words = [['Santa', 'Jolly figure who brings gifts at Christmas'], ['Reindeer', "Animal with antlers that pulls Santa's sleigh"], ['Mistletoe', 'Plant used for kissing under during the holidays'], ['Stocking', 'Item hung by the fireplace for Santa to fill'], ['Giftwrap', 'Paper used to encase presents at Christmas'], ['Snowflake', 'Unique crystal that falls from the sky in winter'], ['Jinglebells', 'Festive song often heard during the holiday season'], ['Cranberry', 'Tart red fruit often used in holiday dishes'], ['Ornament', 'Decoration used to adorn Christmas trees'], ['Nutcracker', 'Classic holiday toy that cracks nuts']]
     return words
  
 class Crossword(object):
@@ -346,7 +343,7 @@ def crossword():
         prompt = request.args.get('prompt')
         if prompt:
             grid_size = 15
-            prompt_req = "Provide 10 words (no spaces or hyphens) that are less than or equal to " + str(grid_size) + " characters in length and are related to " + prompt + ". Additionally, provide corresponding clues for each word."
+            prompt_req = "Provide 10 unique words (no spaces or hyphens) that are less than or equal to " + str(grid_size) + " characters in length and are related to " + prompt + ". Additionally, provide corresponding clues for each word."
             words_and_clues = get_words_and_clues(prompt_req)
             print(words_and_clues)
             

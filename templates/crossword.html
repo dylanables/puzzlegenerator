@@ -5,31 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puzzle Generator: Crossword</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <script>
-        function toggleSolution(){
-            var unsolved = document.getElementById('unsolved');
-            var solved = document.getElementById('solved');
-            var toggleSolution = document.getElementById('toggleSolution');
-            console.log("button clicked")
-
-            if (solved.style.display == 'block') {
-                unsolved.style.display = 'block';
-                solved.style.display = 'none';
-                toggleSolution.innerHTML = 'Reveal Solution';
-                console.log("hide clicked")
-            } else {
-                unsolved.style.display = 'none';
-                solved.style.display = 'block';
-                toggleSolution.innerHTML = 'Hide Solution';
-                console.log("reveal clicked")
-            }
-        }
-    </script>
 </head>
 <body>
     <div class="container">
         <div>
             {% if (prompt == None) or (prompt == '') %}
+            <img src="{{ url_for('static', filename='images/crossword.jpg') }}" alt="Crossword Puzzle"/>
             <form action="/crossword" method="GET">
                 Choose a topic: <input type="text" name="prompt" id="prompt" />
                 <input type="submit" value="Generate Crossword" />
@@ -90,5 +71,26 @@
             {% endif %}
         </div>
     </div>
+
+    <script>
+        function toggleSolution(){
+            var unsolved = document.getElementById('unsolved');
+            var solved = document.getElementById('solved');
+            var toggleSolution = document.getElementById('toggleSolution');
+            console.log("button clicked")
+
+            if (solved.style.display == 'block') {
+                unsolved.style.display = 'block';
+                solved.style.display = 'none';
+                toggleSolution.innerHTML = 'Reveal Solution';
+                console.log("hide clicked")
+            } else {
+                unsolved.style.display = 'none';
+                solved.style.display = 'block';
+                toggleSolution.innerHTML = 'Hide Solution';
+                console.log("reveal clicked")
+            }
+        }
+    </script>
 </body>
 </html>
