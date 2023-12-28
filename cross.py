@@ -1,11 +1,13 @@
-from __main__ import app
-from flask import render_template, request
+from flask import render_template, request, Blueprint
 import random, re, time, string, json
 from copy import copy as duplicate
 from dotenv import load_dotenv
 load_dotenv()
 from openai import OpenAI
 client = OpenAI()
+
+
+crossword_blueprint = Blueprint('crossword', __name__)
  
 # optional, speeds up by a factor of 4
 # import psyco
@@ -337,7 +339,7 @@ class Word(object):
  
 #start_full = float(time.time())
 
-@app.route("/crossword", methods=['GET'])
+@crossword_blueprint.route("/crossword", methods=['GET'])
 def crossword():
     if request.method == 'GET':
         prompt = request.args.get('prompt')

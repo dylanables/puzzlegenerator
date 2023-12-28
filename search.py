@@ -1,11 +1,12 @@
-from __main__ import app
-from flask import render_template, request, make_response
+from flask import render_template, request, make_response, Blueprint
 import random, string, json
 from dotenv import load_dotenv
 load_dotenv()
 from openai import OpenAI
 from fpdf import FPDF
 client = OpenAI()
+
+wordsearch_blueprint = Blueprint('wordsearch', __name__)
 
 def get_words(prompt_req):
     response = client.chat.completions.create(
@@ -145,7 +146,7 @@ def save_pdf(prompt, grid, words):
     response.headers["Content-Type"] = "application/pdf"
     return response
 
-@app.route("/wordsearch", methods=['GET'])
+@wordsearch_blueprint.route("/wordsearch", methods=['GET'])
 def wordsearch():
     if request.method == 'GET':
         prompt = request.args.get('prompt')
