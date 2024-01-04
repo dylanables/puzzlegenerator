@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puzzle Generator: Crossword</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='css/styles.css') }}"></script>
 </head>
 <body>
     <div class="container">
         <div>
             {% if (prompt == None) or (prompt == '') %}
-            <img src="{{ url_for('static', filename='images/crossword.jpg') }}" alt="Crossword Puzzle"/>
-            <form action="/crossword" method="GET">
-                Choose a topic: <input type="text" name="prompt" id="prompt" />
-                <input type="submit" value="Generate Crossword" />
+            <img src="{{ url_for('static', filename='images/crossword.jpg') }}" class="puzzle-img" alt="Crossword Puzzle"/>
+            <form action="/crossword" onsubmit="loading();" method="GET">
+                <label for="prompt">Choose a topic: </label> 
+                <input type="text" name="prompt" id="prompt" />
+                <button type="submit" class="submitBtn" id="loadingBtn">
+                    Generate Crossword
+                    <div id="loading"></div>
+                </button>
             </form>
             {% endif %}
         </div>

@@ -5,15 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puzzle Generator: Word Search</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='scripts/loading.js') }}"></script>
 </head>
 <body>
+<div class="container">
     <div>
         {% if (prompt == None) or (prompt == '') %}
-        <img src="{{ url_for('static', filename='images/wordsearch.jpg') }}" alt="Word Search Puzzle"/>
-        <form action="/wordsearch" method="GET">
-            Choose a topic: <input type="text" name="prompt" id="prompt" />
-            Exclude backwards: <input type="checkbox" name="backwards" id="backwards" value="0" />
-            <input type="submit" value="Generate Word Search" />
+        <img src="{{ url_for('static', filename='images/wordsearch.jpg') }}" alt="Word Search Puzzle" class="puzzle-img"/>
+        <form action="/wordsearch" onsubmit="loading();" method="GET">
+            <label for="prompt">Choose a topic:</label>
+            <input type="text" name="prompt" id="prompt" />
+            <label for="backwards">Exclude backwards:</label> 
+            <input type="checkbox" name="backwards" id="backwards" value="0" />
+            <button type="submit" class="submitBtn" id="loadingBtn">
+                Generate Word Search
+                <div id="loading"></div>
+            </button>
         </form>
         {% endif %}
     </div>
@@ -42,6 +49,7 @@
 
         {% endif %}
     </div>
+</div>
 
 </body>
 </html>
