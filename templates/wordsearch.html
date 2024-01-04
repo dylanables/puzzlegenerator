@@ -8,48 +8,62 @@
     <script src="{{ url_for('static', filename='scripts/loading.js') }}"></script>
 </head>
 <body>
-<div class="container">
-    <div>
-        {% if (prompt == None) or (prompt == '') %}
-        <img src="{{ url_for('static', filename='images/wordsearch.jpg') }}" alt="Word Search Puzzle" class="puzzle-img"/>
-        <form action="/wordsearch" onsubmit="loading();" method="GET">
-            <label for="prompt">Choose a topic:</label>
-            <input type="text" name="prompt" id="prompt" />
-            <label for="backwards">Exclude backwards:</label> 
-            <input type="checkbox" name="backwards" id="backwards" value="0" />
-            <button type="submit" class="submitBtn" id="loadingBtn">
-                Generate Word Search
-                <div id="loading"></div>
-            </button>
-        </form>
-        {% endif %}
+    <nav class="navbar">
+        <div class="logo"><a href="/">Generate Puzzles</a></div>
+        <ul class="nav-links">
+
+            <input type="checkbox" id="checkbox_toggle" />
+            <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+
+            <div class="menu">
+                <li id="active"><a href="/wordsearch">Word Search</a></li>
+                <li><a href="/crossword">Crossword</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div>
+            {% if (prompt == None) or (prompt == '') %}
+            <img src="{{ url_for('static', filename='images/wordsearch.jpg') }}" alt="Word Search Puzzle" class="puzzle-img"/>
+            <form action="/wordsearch" onsubmit="loading();" method="GET">
+                <label for="prompt">Choose a topic:</label>
+                <input type="text" name="prompt" id="prompt" />
+                <label for="backwards">Exclude backwards:</label> 
+                <input type="checkbox" name="backwards" id="backwards" value="0" />
+                <button type="submit" class="submitBtn" id="loadingBtn">
+                    Generate Word Search
+                    <div id="loading"></div>
+                </button>
+            </form>
+            {% endif %}
+        </div>
+        <div>
+            {% if prompt %}
+            <a href="/wordsearch">Re-do</a>
+            <button onclick="window.print()">Save/Print</button>
+            <h1>{{prompt}} Word Search</h1>
+
+            <table>
+                <tbody>
+                    {% for row in grid %}
+                        <tr>
+                            {% for letter in row %}
+                            <td style="text-align: center;">{{letter}}</td>
+                            {% endfor %} 
+                        </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+
+            <p><b>Words:</b></p>
+            {% for word in words %}
+                <p>{{word}}</p>
+            {% endfor %}
+
+            {% endif %}
+        </div>
     </div>
-    <div>
-        {% if prompt %}
-        <a href="/wordsearch">Re-do</a>
-        <button onclick="window.print()">Save/Print</button>
-        <h1>{{prompt}} Word Search</h1>
-
-        <table>
-            <tbody>
-                {% for row in grid %}
-                    <tr>
-                        {% for letter in row %}
-                        <td style="text-align: center;">{{letter}}</td>
-                        {% endfor %} 
-                    </tr>
-                {% endfor %} 
-            </tbody>
-        </table>
-
-        <p><b>Words:</b></p>
-        {% for word in words %}
-            <p>{{word}}</p>
-        {% endfor %}
-
-        {% endif %}
-    </div>
-</div>
 
 </body>
 </html>

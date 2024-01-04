@@ -8,6 +8,20 @@
     <script src="{{ url_for('static', filename='css/styles.css') }}"></script>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="logo"><a href="/">Generate Puzzles</a></div>
+        <ul class="nav-links">
+
+            <input type="checkbox" id="checkbox_toggle" />
+            <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+
+            <div class="menu">
+                <li><a href="/wordsearch">Word Search</a></li>
+                <li id="active"><a href="/crossword">Crossword</a></li>
+            </div>
+        </ul>
+    </nav>
+
     <div class="container">
         <div>
             {% if (prompt == None) or (prompt == '') %}

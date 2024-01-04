@@ -3,21 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <title>Generate Puzzles</title>
 </head>
 <body>
-    <h1>Generate custom puzzles with the help of AI!</h1>
-    <div>
-        <a href="/wordsearch">
-        <img src="{{ url_for('static', filename='images/wordsearch.jpg') }}" alt="Word Search Puzzle"/>
-        <p>Generate Word Search</p>
-        </a>
-    </div>
-    <div>
-        <a href="/crossword">
-        <img src="{{ url_for('static', filename='images/crossword.jpg') }}" alt="Crossword Puzzle"/>
-        <p>Generate Crossword</p>
-        </a>
+    <nav class="navbar">
+        <div class="logo"><a href="/">Generate Puzzles</a></div>
+        <ul class="nav-links">
+
+            <input type="checkbox" id="checkbox_toggle" />
+            <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+
+            <div class="menu">
+                <li><a href="/wordsearch">Word Search</a></li>
+                <li><a href="/crossword">Crossword</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Generate custom puzzles with the help of AI!</h1>
+        <div class="puzzles-container">
+            <div>
+                <a href="/wordsearch">
+                <img src="{{ url_for('static', filename='images/wordsearch.jpg') }}" alt="Word Search Puzzle"/>
+                <p>Generate Word Search</p>
+                </a>
+            </div>
+            <div>
+                <a href="/crossword">
+                <img src="{{ url_for('static', filename='images/crossword.jpg') }}" alt="Crossword Puzzle"/>
+                <p>Generate Crossword</p>
+                </a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

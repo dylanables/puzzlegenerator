@@ -1,6 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* NAVBAR STYLING STARTS */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: rgb(35, 35, 35);
+    color: #fff;
+}
+
+.navbar a, .logo a {
+    text-decoration: none;
+}
+
+.navbar li {
+    list-style: none;
+}
+
+.navbar input[type=checkbox] {
+    display: none;
+} 
+
+.nav-links a {
+    color: #fff;
+}
+
+.logo a {
+    font-size: 32px;
+    color: #fff;
+}
+
+/* navbar menu */
+.menu {
+    display: flex;
+    gap: 1em;
+    font-size: 18px;
+}
+
+.menu li:hover {
+    background-color: #353535;
+    border-radius: 5px;
+    transition: 0.3s ease;
+}
+
+.menu li#active {
+    background-color: #353535;
+    border-radius: 5px;
+}
+
+.menu li {
+    padding: 5px 14px;
+}
+
+.hamburger {
+display: none;
+font-size: 24px;
+user-select: none;
+}
+
+@media (max-width: 768px) {
+.menu {
+    display:none;
+    position: absolute;
+    background-color:rgb(35, 35, 35);
+    right: 0;
+    left: 0;
+    text-align: center;
+    padding: 16px 0;
+}
+
+.menu li:hover {
+    background-color:#353535;
+    transition: 0.3s ease;
+}
+
+.menu li#active {
+    background-color:#353535;
+}
+
+.menu li + li {
+    margin-top: 12px;
+}
+
+input[type=checkbox]:checked ~ .menu {
+    display: block;
+}
+
+.hamburger {
+    display: block;
+    cursor: pointer;
+}
+
+.dropdown {
+    left: 50%;
+    top: 30px;
+    transform: translateX(35%);
+}
+
+.dropdown li:hover {
+    background-color: #353535;
+}
+}
+
 .container {
     margin: auto;
     width: 50%;
+    padding: 20px;
+}
+
+.puzzles-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    text-align: center;
+    margin-top: 30px;
 }
 
 .puzzle-img {
