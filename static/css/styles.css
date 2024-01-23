@@ -111,11 +111,13 @@ input[type=checkbox]:checked ~ .menu {
     margin: auto;
     width: 50%;
     padding: 20px;
+    text-align: center;
 }
 
 .puzzles-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
     gap: 30px;
     text-align: center;
     margin-top: 30px;
@@ -187,7 +189,7 @@ input[type=checkbox] {
 background-color: #45a049;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 860px) {
     .container {
         width: 100%;
     }

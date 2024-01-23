@@ -9,6 +9,7 @@ client = OpenAI()
 wordsearch_blueprint = Blueprint('wordsearch', __name__)
 
 def get_words(prompt_req):
+    """
     response = client.chat.completions.create(
         model="gpt-3.5-turbo-1106",
         response_format={ "type": "json_object" },
@@ -20,6 +21,8 @@ def get_words(prompt_req):
     json_response = json.loads(response.choices[0].message.content)
     print(json_response)
     words = json_response['words']
+    """
+    words = ['BARKING', 'FETCH', 'TAILWAG', 'PAWPRINT', 'PUPPY', 'WOOFING', 'LEASH', 'HOUND', 'BONE', 'LOYAL']
     print(words)
     
     return words
